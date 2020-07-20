@@ -1,11 +1,3 @@
-/**
-* MODULES TO CONNECT TO MYSQL DATABASE
-*
-* CLASS NAME: MySQLDatabase
-* PROGRAMMER: YU CHI TO
-* VERSION: 1.3.1 (8-7-2020)
-*/
-
 const mysql = require('mysql');
 
 
