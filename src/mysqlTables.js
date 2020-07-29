@@ -11,29 +11,29 @@ class MySQLTable extends MySQLDatabase {
 
   insert(values, callback)
   {
-    super.insert(this.tb, values, function(err, res) {
-      return callback(err, res);
+    super.insert(this.tb, values, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   select(fields, cond, callback)
   {
-    super.select(this.tb, fields, cond, function(err, res) {
-      return callback(err, res);
+    super.select(this.tb, fields, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   delete(cond, callback)
   {
-    super.delete(this.tb, cond, function(err, res) {
-      return callback(err, res);
+    super.delete(this.tb, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   update(values, cond, callback)
   {
-    super.update(this.tb, values, cond, function(err, res) {
-      return callback(err, res);
+    super.update(this.tb, values, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 }
@@ -47,29 +47,29 @@ class MySQLTableConnection extends MySQLDatabaseConnection {
 
   insert(values, callback)
   {
-    super.insert(this.tb, values, function(err, res) {
-      return callback(err, res);
+    super.insert(this.tb, values, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   select(fields, cond, callback)
   {
-    super.select(this.tb, fields, cond, function(err, res) {
-      return callback(err, res);
+    super.select(this.tb, fields, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   delete(cond, callback)
   {
-    super.delete(this.tb, cond, function(err, res) {
-      return callback(err, res);
+    super.delete(this.tb, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   update(values, cond, callback)
   {
-    super.update(this.tb, values, cond, function(err, res) {
-      return callback(err, res);
+    super.update(this.tb, values, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 }

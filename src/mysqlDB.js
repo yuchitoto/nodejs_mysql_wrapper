@@ -10,29 +10,29 @@ class MySQLDatabase {
 
   insert(tb, values, callback)
   {
-    this.conn.insert(this.db, tb, values, function(err, res) {
-      return callback(err, res);
+    this.conn.insert(this.db, tb, values, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   select(tb, fields, cond, callback)
   {
-    this.conn.select(this.db, tb, fields, cond, function(err, res) {
-      return callback(err, res);
+    this.conn.select(this.db, tb, fields, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   delete(tb, cond, callback)
   {
-    this.conn.delete(this.db, tb, cond, function(err, res) {
-      return callback(err, res);
+    this.conn.delete(this.db, tb, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   update(tb, values, cond, callback)
   {
-    this.conn.update(this.db, tb, values, cond, function(err, res) {
-      return callback(err, res);
+    this.conn.update(this.db, tb, values, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 }
@@ -46,29 +46,29 @@ class MySQLDatabaseConnection extends MySQLConnection {
 
   insert(tb, values, callback)
   {
-    super.insert(this.db, tb, values, function(err, res) {
-      return callback(err, res);
+    super.insert(this.db, tb, values, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   select(tb, fields, cond, callback)
   {
-    super.select(this.db, tb, fields, cond, function(err, res) {
-      return callback(err, res);
+    super.select(this.db, tb, fields, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   delete(tb, cond, callback)
   {
-    super.delete(this.db, tb, cond, function(err, res) {
-      return callback(err, res);
+    super.delete(this.db, tb, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 
   update(tb, values, cond, callback)
   {
-    super.update(this.db, tb, values, cond, function(err, res) {
-      return callback(err, res);
+    super.update(this.db, tb, values, cond, function(err, data, fd) {
+      return callback(err, data, fd);
     });
   }
 }

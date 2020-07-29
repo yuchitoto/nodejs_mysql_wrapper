@@ -3,7 +3,7 @@
 *
 * CLASS NAME: MySQLDatabase
 * PROGRAMMER: YU CHI TO
-* VERSION: 1.0.0 (8-7-2020)
+* VERSION: 1.0.1 (8-7-2020)
 */
 
 const conn = require('./src/mysqlConnection.js');
