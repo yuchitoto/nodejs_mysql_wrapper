@@ -48,7 +48,42 @@ class MySQLConnection {
 
   select(db, tb, fields, cond, callback)
   {
-    var query = `SELECT ${fieldsStringnify(fields, tb)} FROM ${db}.${tb} WHERE ` + conditionParser(cond);
+    var query = "";
+    if (typeof db === 'string' && typeof tb === 'string') // single table query
+    {
+      query = `SELECT ${fieldsStringnify(fields, tb)} FROM ${db}.${tb} WHERE ` + conditionParser(cond);
+    }
+    else if(Array.isArray(tb))
+    {
+      var flag = false;
+      query = 'SELECT';
+      for (const i of fields)
+      {
+        query += flag===true?',':'';
+        flag = true;
+        query += ` ${i['table']?i['table']:i['tb']}.${i['field']?i['field']:i['fd']}${i['as']?` AS ${i['as']}`:''}`;
+      }
+      query += ' FROM';
+      flag = false;
+      for (const i of tb)
+      {
+        query += (flag===true)?',':'';
+        flag = true;
+        if (typeof i === 'string' && typeof db === 'string')
+        {
+          query += ` ${db}.${i}`;
+        }
+        else
+        {
+          query += ` ${i['db']?i['db']:i['database']}.${i['tb']?i['tb']:i['table']}${i['as']?` AS ${i['as']}`:''}`;
+        }
+      }
+      query += ' WHERE ' + conditionParser(cond);
+    }
+    else
+    {
+      throw new Error({'TypeError':'invalid parameters'});
+    }
     this.pool.getConnection(function(connerr, conn) {
       if (connerr)
       {
@@ -81,8 +116,7 @@ class MySQLConnection {
   update(db, tb, values, cond, callback)
   {
     var valueStr = "";
-    const tmpkey = Object.keys(values);
-    for (const i of tmpkey)
+    for (const i in values)
     {
       valueStr += ((valueStr.length > 0) ? ', ' : '') + `${i}=${values[i]}`;
     }
@@ -174,14 +208,29 @@ function inArray(datum, array)
 
 function conditionParser(conditions)
 {
+  function parseCondObject(obj) {
+    const tmpkey = Object.keys(obj);
+    if (obj.length === 2)
+    {
+      return `${obj['table']?obj['table']:obj['tb']}.${obj['field']?obj['field']:obj['fd']}`;
+    }
+    else if (obj.length === 1)
+    {
+      return `${tmpkey[0]}.${obj[tmpkey[0]]}`;
+    }
+    else
+    {
+      throw new Error({'TypeError':'Invalid Condition Object'});
+    }
+  }
   const key = Object.keys(conditions);
   if (conditions == null)
   {
     return "";
   }
-  else if (inArray('field', key) && inArray('value', key) && key.length == 2)
+  else if (inArray('field', key) && inArray('value', key))
   {
-    return `\`${conditions['field']}\`=${(typeof (conditions['value']) === 'number')?conditions['value']:`"${conditions['value']}"`}`;
+    return `\`${typeof conditions['field'] === 'string' ? conditions['field'] : parseCondObject(conditions['field'])}\` ${(conditions['relation']==undefined)?'=':conditions['relation']} ${(typeof (conditions['value']) === 'number')?conditions['value']:typeof conditions['value'] === 'string' ? `"${conditions['value']}"` : parseCondObject(conditions['value'])}`;
   }
   else if (key.length == 1)
   {
