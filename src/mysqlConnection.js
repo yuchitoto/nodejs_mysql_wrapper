@@ -39,9 +39,8 @@ class MySQLConnection {
         return callback(conerr, null, null);
       }
       conn.query(query, pr, function(err, data, fd) {
-        callback(err, data, fd);
         conn.release();
-        return;
+        return callback(err, data, fd);
       });
     });
   }
@@ -69,13 +68,13 @@ class MySQLConnection {
       {
         query += (flag===true)?',':'';
         flag = true;
-        if (typeof i === 'string' && typeof db === 'string')
+        if (typeof i === 'string') // assuming all table from same db as not specified, thus db must be string
         {
           query += ` ${db}.${i}`;
         }
         else
         {
-          query += ` ${i['db']?i['db']:i['database']}.${i['tb']?i['tb']:i['table']}${i['as']?` AS ${i['as']}`:''}`;
+          query += ` ${typeof db==='string'?db:i['db']?i['db']:i['database']}.${i['tb']?i['tb']:i['table']}${i['as']?` AS ${i['as']}`:''}`;
         }
       }
       query += ' WHERE ' + conditionParser(cond);
@@ -90,9 +89,8 @@ class MySQLConnection {
         return callback(connerr, null, null);
       }
       conn.query(query, function(err, data, fd) {
-        callback(err, data, fd);
         conn.release();
-        return;
+        return callback(err, data, fd);
       });
     });
   }
@@ -106,9 +104,8 @@ class MySQLConnection {
         return callback(connerr, null, null);
       }
       conn.query(query, function(err, data, fd) {
-        callback(err, data, fd);
         conn.release();
-        return;
+        return callback(err, data, fd);
       });
     });
   }
@@ -127,9 +124,8 @@ class MySQLConnection {
         return callback(connerr, null, null);
       }
       conn.query(query, function(err, data, fd) {
-        callback(err, data, fd);
         conn.release();
-        return;
+        return callback(err, data, fd);
       });
     });
   }
@@ -147,12 +143,16 @@ class MySQLConnection {
         if (typeof value === 'function')
         {
           conn.query(query, function(err, data, fd) {
+            conn.release();
+            conn = null;
             return callback(err, data, fd);
           });
         }
         else
         {
           conn.query(query, value, function(err, data, fd) {
+            conn.release();
+            conn = null;
             return callback(err, data, fd);
           });
         }
