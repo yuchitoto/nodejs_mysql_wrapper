@@ -210,11 +210,11 @@ function conditionParser(conditions)
 {
   function parseCondObject(obj) {
     const tmpkey = Object.keys(obj);
-    if (obj.length === 2)
+    if (tmpkey.length === 2)
     {
       return `${obj['table']?obj['table']:obj['tb']}.${obj['field']?obj['field']:obj['fd']}`;
     }
-    else if (obj.length === 1)
+    else if (tmpkey.length === 1)
     {
       return `${tmpkey[0]}.${obj[tmpkey[0]]}`;
     }
@@ -230,7 +230,7 @@ function conditionParser(conditions)
   }
   else if (inArray('field', key) && inArray('value', key))
   {
-    return `\`${typeof conditions['field'] === 'string' ? conditions['field'] : parseCondObject(conditions['field'])}\` ${(conditions['relation']==undefined)?'=':conditions['relation']} ${(typeof (conditions['value']) === 'number')?conditions['value']:typeof conditions['value'] === 'string' ? `"${conditions['value']}"` : parseCondObject(conditions['value'])}`;
+    return `${typeof conditions['field'] === 'string' ? conditions['field'] : parseCondObject(conditions['field'])} ${(conditions['relation']==undefined)?'=':conditions['relation']} ${(typeof (conditions['value']) === 'number')?conditions['value']:typeof conditions['value'] === 'string' ? `"${conditions['value']}"` : parseCondObject(conditions['value'])}`;
   }
   else if (key.length == 1)
   {
